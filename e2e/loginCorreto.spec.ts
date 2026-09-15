@@ -7,5 +7,7 @@ test.describe('Página de Login', () => {
         const paginaLogin = new PaginaLogin(page);
 
         await paginaLogin.visitar();
+        await paginaLogin.fazerLogin('ronaldo28@gmail.com', 'Senha12345');
+        await paginaLogin.loginFeitoComSucesso();
     });
 });

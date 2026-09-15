@@ -2,39 +2,45 @@ import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-export default [
-  // 1. Sempre comece estendendo as configurações globais de terceiros
+export default tseslint.config(
+  // 1. Configurações recomendadas base do JavaScript
   js.configs.recommended,
+
+  // 2. Desativa a checagem de tipos em tempo real para os testes (evita o travamento/tela vermelha)
   ...tseslint.configs.recommended,
 
-  // 2. Configuração global do seu projeto
+  // 3. Regras personalizadas aplicadas a TODOS os arquivos do projeto
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
     languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.node // Adicionado para o Playwright reconhecer o ambiente Node
-      }
+        ...globals.node,
+      },
     },
     rules: {
       'indent': 'off',
       'linebreak-style': 'off',
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
+      'quotes': ['error', 'single'], // Vai apontar erro se usar aspas duplas ""
+      'semi': ['error', 'always'],   // Vai apontar erro se esquecer o ponto e vírgula ;
     },
   },
 
-  // 3. Configuração específica para arquivos de teste (Playwright)
+  // 4. Configuração isolada para arquivos do Playwright (impede conflitos)
   {
     files: ['**/*.test.{js,mjs,cjs,ts,mts}', '**/*.spec.{js,mjs,cjs,ts,mts}', '**/tests/**/*.{js,mjs,cjs,ts,mts}'],
     languageOptions: {
       globals: {
-        ...globals.jest // Ajuda o editor a entender asserções como 'expect' sem bugar
-      }
+        ...globals.jest,
+      },
     },
     rules: {
       'no-undef': 'off',
-      '@typescript-eslint/no-explicit-any': 'off', // Evita alertas chatos em testes
+      // Garante que o TypeScript não tente validar tipos profundos do Playwright em tempo real
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/await-thenable': 'off',
     },
   },
-];
+);

@@ -25,9 +25,10 @@ export default class PaginaPrincipal {
         this.botaoIncrementarCriancas = page.getByTestId('seletor-passageiro-criancas').getByRole('button', { name: 'adição' });
         this.botaoIncrementarBebes = page.getByTestId('seletor-passageiro-bebes').getByRole('button', { name: 'adição' });
         this.botaoFecharModalPassageiros = page.getByTestId('fechar-modal-passageiros');
-        
+
         this.campoDropdownOrigem = page.getByTestId('campo-dropdown-origem').getByLabel('Origem');
         this.campoDropdownDestino = page.getByTestId('campo-dropdown-destino').getByLabel('Destino');
+
         this.campoDataIda = page.getByTestId('campo-data-ida');
         this.botaoBuscarPassagens = page.getByTestId('botao-buscar-passagens');
         this.textoIdaVolta = page.getByTestId('texto-ida-volta');
@@ -68,5 +69,13 @@ export default class PaginaPrincipal {
 
     async fecharModalPassageiros() {
         await this.botaoFecharModalPassageiros.click();
+    }
+
+    async definirOrigemEDestino(origem: string, destino: string) {
+        await this.campoDropdownOrigem.fill(origem);
+        await this.campoDropdownOrigem.press('Enter');
+
+        await this.campoDropdownDestino.fill(destino);
+        await this.campoDropdownDestino.press('Enter');
     }
 }

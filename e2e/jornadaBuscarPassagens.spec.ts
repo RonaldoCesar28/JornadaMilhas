@@ -15,11 +15,13 @@ test.describe('Buscar Passagens', () => {
         await paginaPrincipal.fecharModalPassageiros();
 
         await paginaPrincipal.definirOrigemEDestino('minas gerais', 'rio de janeiro');
-        await paginaPrincipal.definirData(new Date());
+
+        const dataIda = new Date(); // armazenamos a data de ida em uma variável
+        await paginaPrincipal.definirDataIda(dataIda); // usamos a variável
         await paginaPrincipal.buscarPassagens();
 
-        await paginaPrincipal.estaMostrandoPassagem('Somente ida', 'Minas Gerais', 'Rio de Janeiro');
-    })
-})
+        await paginaPrincipal.estaMostrandoPassagem('Somente ida', 'Minas Gerais', 'Rio de Janeiro', dataIda); // parâmetro adicionado
+    });
+});
 
 
